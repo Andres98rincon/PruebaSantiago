@@ -39,4 +39,18 @@ class Invoice extends Model
     {
         return $this->belongsTo(Entity::class);
     }
+
+
+    /**
+     * The roles that belong to the Invoice
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'invoice_items')
+            ->withPivot('quantity', 'unit_price', 'total')
+            ->withTimestamps();
+    }
 }

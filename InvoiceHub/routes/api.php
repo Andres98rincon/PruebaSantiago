@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EntityController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ProductController;
 
 Route::group([
     'middleware' => 'api',
@@ -32,7 +33,7 @@ Route::middleware('api', 'auth')->prefix('invoices')->controller(InvoiceControll
 });
 
 // Rutas para la gestión de entidades
-Route::prefix('entities')->controller(EntityController::class)->group(function () {
+Route::middleware('api', 'auth')->prefix('entities')->controller(EntityController::class)->group(function () {
     // Ruta para listar todas las entidades
     Route::get('list', 'index');
 
@@ -47,4 +48,10 @@ Route::prefix('entities')->controller(EntityController::class)->group(function (
 
     // Ruta para eliminar una entidad específica
     Route::delete('{entity}/destroy', 'destroy');
+});
+
+
+Route::middleware('api', 'auth')->prefix('products')->controller(ProductController::class)->group(function () {
+    // Ruta para listar todos los productos
+    Route::get('list', 'index');
 });

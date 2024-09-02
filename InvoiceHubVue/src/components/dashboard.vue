@@ -34,30 +34,6 @@ const invoice = ref({
   total: "",
 });
 
-const handleFormSubmit = async () => {
-  try {
-    await createInvoice(invoice.value);
-    invoices.value = await getInvoices();
-    Object.keys(invoice.value).forEach((key) => {
-      invoice.value[key] = "";
-    });
-    Swal.fire({
-      title: "Éxito",
-      text: "Factura creada correctamente",
-      icon: "success",
-      confirmButtonText: "Aceptar",
-    });
-  } catch (error) {
-    console.error(error.message);
-    Swal.fire({
-      title: "Error",
-      text: "No se pudo crear la factura",
-      icon: "error",
-      confirmButtonText: "Aceptar",
-    });
-  }
-};
-
 onMounted(async () => {
   try {
     invoices.value = await getInvoices();

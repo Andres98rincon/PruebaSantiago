@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('invoice_items', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('invoice_id')->comment('Id de la factura')->constrained('invoices');
-            $table->integer('quantity')->comment('Cantidad');
-            $table->decimal('unit_price', 10, 2)->comment('Precio unitario');
-            $table->decimal('total', 10, 2)->comment('total');
+            $table->string('name');
+            $table->unsignedBigInteger('price');
             $table->timestamps();
         });
     }

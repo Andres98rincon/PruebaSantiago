@@ -33,7 +33,14 @@
           <td>{{ invoice.subtotal }}</td>
           <td>{{ invoice.tax }}</td>
           <td>{{ invoice.total }}</td>
-          <td>{{ invoice.items_count }}</td>
+          <td>
+            <ul>
+              <li v-for="product in invoice.products" :key="product.id">
+                {{ product.name }} - {{ product.pivot.quantity }} x
+                {{ product.pivot.unit_price }}
+              </li>
+            </ul>
+          </td>
           <td>
             <button
               class="btn col-12 text-white btn-success btn-sm"
