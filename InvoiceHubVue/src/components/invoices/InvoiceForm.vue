@@ -29,7 +29,6 @@
         <div class="form-group">
           <label for="entitySelectReceiver">Receptor de la factura:</label>
           <select
-            required
             class="form-control"
             id="entitySelectReceiver"
             v-model="invoice.receiver_id"
@@ -48,7 +47,6 @@
         <div class="form-group">
           <label for="entitySelectTransmitter">Emisor de la factura</label>
           <select
-            required
             class="form-control"
             id="entitySelectTransmitter"
             v-model="invoice.transmitter_id"
