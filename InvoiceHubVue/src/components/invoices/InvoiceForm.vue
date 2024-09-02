@@ -5,7 +5,7 @@
         <div class="form-group">
           <label for="invoice_number">Número de la factura</label>
           <input
-            v-model="invoice.invoice_number"
+            v-model.number="invoice.invoice_number"
             id="invoice_number"
             class="form-control"
             type="number"
@@ -65,7 +65,7 @@
         <div class="form-group">
           <label for="subtotal">Subtotal</label>
           <input
-            v-model="invoice.subtotal"
+            v-model.number="invoice.subtotal"
             id="subtotal"
             class="form-control"
             type="number"
@@ -76,9 +76,9 @@
       </div>
       <div class="col-4 mb-2">
         <div class="form-group">
-          <label for="tax">IVA</label>
+          <label for="tax">IVA (%)</label>
           <input
-            v-model="invoice.tax"
+            v-model.number="invoice.tax"
             id="tax"
             class="form-control"
             type="number"
@@ -91,12 +91,12 @@
         <div class="form-group">
           <label for="total">Total</label>
           <input
-            v-model="invoice.total"
+            :value="computedTotal"
             id="total"
             class="form-control"
             type="number"
             step="0.01"
-            required
+            readonly
           />
         </div>
       </div>
@@ -111,25 +111,40 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from "vue"; // Importa las funciones defineProps y defineEmits para manejar las props y los eventos
+import { defineProps, defineEmits, computed, watch } from "vue";
 
 // Define las props que se esperan recibir del componente padre
 const props = defineProps({
   invoice: {
-    type: Object, // La factura es un objeto
-    required: true, // Es obligatoria
+    type: Object,
+    required: true,
   },
   entities: {
-    type: Array, // Las entidades son un arreglo (lista)
-    required: true, // Es obligatoria
+    type: Array,
+    required: true,
   },
 });
 
 // Define los eventos que el componente emitirá
-const emit = defineEmits(["submit"]); // Emite un evento 'submit' cuando se envía el formulario
+const emit = defineEmits(["submit"]);
+
+// Propiedad calculada para obtener el total
+const computedTotal = computed(() => {
+  const subtotal = parseFloat(props.invoice.subtotal) || 0;
+  const taxPercentage = parseFloat(props.invoice.tax) || 0;
+  const taxAmount = (subtotal * taxPercentage) / 100;
+  return (subtotal + taxAmount).toFixed(2); // Ajusta el total a dos decimales
+});
+
+// Observa cambios en el subtotal y el IVA para actualizar el total
+watch([() => props.invoice.subtotal, () => props.invoice.tax], () => {
+  props.invoice.total = computedTotal.value;
+});
 
 // Función que se ejecuta al enviar el formulario
 const createNewInvoice = () => {
-  emit("submit"); // Emite el evento 'submit' sin pasar datos adicionales
+  // Actualiza el total antes de emitir el evento
+  props.invoice.total = computedTotal.value;
+  emit("submit");
 };
 </script>

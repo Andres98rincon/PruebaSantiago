@@ -12,7 +12,7 @@ class InvoiceItemController extends Controller
      */
     public function index()
     {
-        //
+        $products = InvoiceItem::all();
     }
 
     /**
